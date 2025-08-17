@@ -21,7 +21,7 @@ app.use(express.json({ limit: "16kb" }));
 app.use(cookie());
 
 app.use(fileUpload({
-    useTempFiles: true
+    useTempFiles: true,
 }));
 
 app.use("/api", userRoute, assistantRoute);

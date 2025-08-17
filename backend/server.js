@@ -8,5 +8,5 @@ import { dbConnection } from "./src/db/db.js"
 dbConnection()
 
 app.listen(process.env.PORT || 3000, () => {
-  console.log(`SERVER IS RUNNING ON PORT ${process.env.PORT}`)
+  console.log(`SERVER IS RUNNING ON PORT ${process.env.PORT}`);
 })

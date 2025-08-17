@@ -248,3 +248,8 @@ export const toogleFollow = async (req, res) => {
 
   }
 }
+
+//USER PROFILE API
+export const getUserProfile = async(req, res)=> {
+  
+}

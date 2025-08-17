@@ -10,6 +10,9 @@ import { cloudinary } from "../utils/cloudinary.js";
 export const uploadFileContent = async (req, res) => {
     const { title, description, contentType } = req.body;
 
+    console.log(req.files);
+    console.log('TEMP FILE PATH', tempFilePath);
+
     //-----VERIFYING JWT MIDDLEWARE-----//
     if (!req.user || !req.user._id) {
         throw new ApiError(401, "UNAUTHORIZED USER");
@@ -18,8 +21,8 @@ export const uploadFileContent = async (req, res) => {
     if (!title || !description) {
         throw new ApiError(400, "Title and description is required");
     }
-
-    if (!req.files || !req.files.content || !req.files.content.tempFilePath) {
+    
+    if (!req.files || !req.files.image || !req.files.image.tempFilePath) {
         console.log("No file uploaded or tempFilePath not found");
 
         return res.status(400).json({
@@ -28,8 +31,9 @@ export const uploadFileContent = async (req, res) => {
         })
     }
 
-    const file = req.files.content;
+    const file = req.files.image;
     const tempFilePath = file.tempFilePath;
+
 
     try {
 
@@ -72,7 +76,9 @@ export const uploadFileContent = async (req, res) => {
         const savedUpload = await newUpload.save();
         // console.log(`${contentType.charAt(0).toUpperCase() + contentType.slice(1)} metadata saved to MongoDB:`, savedUpload);
 
-        return res.status(201).json({
+        return res
+        .status(201)
+        .json({
             success: true,
             message: `${contentType.charAt(0).toUpperCase() + contentType.slice(1)} uploaded Successfully!`,
             cloudinaryData: {

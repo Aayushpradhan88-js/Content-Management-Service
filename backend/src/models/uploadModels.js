@@ -21,12 +21,10 @@ const UploadModel = new Schema({
         required: true,
         enum: ['video', 'file', 'image'],
     },
-    
     uploadedBy: {
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
-
     privacy:{
         type:String,
         enum: ['public', 'private', 'unlisted'],
