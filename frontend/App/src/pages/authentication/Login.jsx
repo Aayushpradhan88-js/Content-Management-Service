@@ -30,7 +30,7 @@ export const Login = () => {
 
         try {
             //FETCHING DATA
-            const res = await fetch(`http://localhost:4000/api/login`,
+            const res = await fetch(`http://localhost:4000/api/auth/v1/login`,
                 {
                     method: 'POST',
                     headers: {

@@ -24,8 +24,8 @@ app.use(fileUpload({
     useTempFiles: true,
 }));
 
-app.use("/api", userRoute, assistantRoute);
-app.use("/upload", uploadRoute);
+app.use("/api/auth/v1", userRoute, assistantRoute);
+app.use("/api/upload", uploadRoute);
 
 app.get("/", (req, res) => {
     res.send("Welcome to Backend")

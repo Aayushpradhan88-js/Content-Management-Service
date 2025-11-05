@@ -33,8 +33,9 @@ export const ContentUploader = ({ onUploadSuccess }) => {
     formData.append("description", description);
     formData.append("contentType", contentType);
 
+    //----------FETCHING TO BACKEND----------//
     try {
-      const response = await fetch('http://localhost:4000/upload/upload-file',
+      const response = await fetch('http://localhost:4000/api/upload/upload-file',
         {
           method: "POST",
           body: formData,
@@ -58,6 +59,7 @@ export const ContentUploader = ({ onUploadSuccess }) => {
         onUploadSuccess(result.mongoData)
       }
 
+      //----------FETCHING TO BACKEND----------//
       setSelectedFile(null);
       setTitle('');
       setDescription('');

@@ -4,7 +4,7 @@ import { User } from "../models/userModels.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
-export const verifyJWT = async(req, res, next) => {
+export const userVerificationMiddleware = async(req, res, next) => {
   try {
       const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
   

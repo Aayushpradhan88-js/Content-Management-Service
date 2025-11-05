@@ -5,9 +5,10 @@ import {
   registerUser,
   loginUser,
   logoutUser,
-  toogleFollow
+  updateUser,
+  toogleFollow,
 } from "../controllers/userController.js";
-import { verifyJWT } from "../middlewares/authMiddleware.js";
+import { userVerificationMiddleware } from "../middlewares/authMiddleware.js";
 
 
 dotenv.config();
@@ -15,7 +16,9 @@ const router = express.Router();
 
 router.post("/register", registerUser);
 router.post("/login",loginUser);
-router.post("/logout", verifyJWT, logoutUser);
-router.patch("/follow/:channelId", verifyJWT, toogleFollow)
+
+router.post("/logout", userVerificationMiddleware, logoutUser);
+router.patch("/follow/:channelId", userVerificationMiddleware, toogleFollow);
+router.put("/edit/profile/:id", userVerificationMiddleware, updateUser);
 
 export { router };

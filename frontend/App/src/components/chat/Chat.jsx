@@ -12,7 +12,7 @@ const Chat = () => {
 
   return (
     <div>
-      {/* //Chat bubble */}
+      {/* CHAT BUBBLE*/}
       {!isOpen && (
         <button
           onClick={toogleChat}

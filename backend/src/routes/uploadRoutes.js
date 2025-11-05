@@ -1,28 +1,28 @@
 
-import express from "express";  
+import express from "express";
 
-import { 
+import {
     uploadFileContent,
     getAllUploads,
-    contentId,   
+    contentId,
     viewIncrement,
     deleteContent,
     updateContent,
     myContent
 } from "../controllers/uploadController.js";
-import { verifyJWT } from "../middlewares/authMiddleware.js";
+import { userVerificationMiddleware } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-router.post("/upload-file", verifyJWT,uploadFileContent);
 router.get("/all-uploads", getAllUploads);
-router.get("/single-upload/:id",verifyJWT, contentId);
-router.patch("/single-upload/:id/views",verifyJWT, viewIncrement);
+router.post("/upload-file", userVerificationMiddleware, uploadFileContent);
+router.get("/single-upload/:id", userVerificationMiddleware, contentId);
+router.patch("/single-upload/:id/views", userVerificationMiddleware, viewIncrement);
 
 //-----FOR CONTENT OWNER ONLY-----//
-router.patch("/update-content/:id",verifyJWT, updateContent);
-router.delete("/delete-content/:id",verifyJWT, deleteContent);
+router.patch("/update-content/:id", userVerificationMiddleware, updateContent);
+router.delete("/delete-content/:id", userVerificationMiddleware, deleteContent);
 
-router.get("/my-content", verifyJWT, myContent);
+router.get("/my-content", userVerificationMiddleware, myContent);
 
-export{router};
+export { router };

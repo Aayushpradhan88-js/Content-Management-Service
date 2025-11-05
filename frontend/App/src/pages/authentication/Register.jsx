@@ -31,7 +31,7 @@ export const Register = () => {
 
         try {
             //FETCHING DATA
-            const res = await fetch(`http://localhost:4000/api/register`,
+            const res = await fetch(`http://localhost:4000/api/auth/v1/register`,
                 {
                     method: 'POST',
                     headers: {

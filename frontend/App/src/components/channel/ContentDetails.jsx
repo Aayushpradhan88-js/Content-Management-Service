@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Toast } from '../toast/Toast';
 import { ChannelSubscriptionUI } from './ChannelSubscriptionUI';
@@ -9,7 +9,7 @@ import { ToogleFollowChannel } from '../../services/FollowSevice';
 
 export const GetContentDetails = (id) => {
   const navigate = useNavigate();
-  const location = useLocation();
+  // const location = useLocation();
 
   const [video, setVideo] = useState(null);
   const [contentItem, setContentItem] = useState(null);
@@ -35,7 +35,7 @@ export const GetContentDetails = (id) => {
     const fetchContentDetails = async () => {
       setIsLoading(true);
 
-      //-----GET CURRENTJ USER ID-----//W
+      //-----GET CURRENTJ USER ID-----//
       const currentUserId = localStorage.getItem('userId');
 
       try {
@@ -75,28 +75,28 @@ export const GetContentDetails = (id) => {
       };
     };
 
-  
+
     fetchContentDetails();
   }, [location.search]);
 
-    //-----Function TO INCREMENT VIEWS----------//
-    const IncrementContentViews = async (contentIdToIncrement) => {
-      try {
-        const viewResponse = await IncrementViews(contentIdToIncrement);
-        if (viewResponse && viewResponse.data && typeof viewResponse.data.views !== 'undefined') {
-          setVideo(prev => prev ? { ...prev, views: viewResponse.data.views } : null);
-          setContentItem(prev => prev ? { ...prev, views: viewResponse.data.views } : null);
-        }
-      }
-
-      catch (error) {
-        console.log("Filed to increment views", error.message);
-        Toast.error("failed to increment views");
+  //-----Function TO INCREMENT VIEWS----------//
+  const IncrementContentViews = async (contentIdToIncrement) => {
+    try {
+      const viewResponse = await IncrementViews(contentIdToIncrement);
+      if (viewResponse && viewResponse.data && typeof viewResponse.data.views !== 'undefined') {
+        setVideo(prev => prev ? { ...prev, views: viewResponse.data.views } : null);
+        setContentItem(prev => prev ? { ...prev, views: viewResponse.data.views } : null);
       }
     }
-    
 
-    //-----Function FOR FOLLOW FEATURE----------//
+    catch (error) {
+      console.log("Filed to increment views", error.message);
+      Toast.error("failed to increment views");
+    }
+  }
+
+
+  //-----Function FOR FOLLOW FEATURE----------//
   const HandleToogleFollow = async () => {
     const token = localStorage.getItem('token'); //-----TODO: MAKE AUTH-CONTEXT-----//
     if (!creatorData || !creatorData._id || !token) {
@@ -116,65 +116,65 @@ export const GetContentDetails = (id) => {
     }
 
   };
-    if (isLoading) {
-      return (
-        <div className='bg-black text-white min-h-screen flex items-center justify-center'>
-          <p>Loading video.....</p>
-        </div>
-      )
-    };
-
-    if (error) {
-      return (
-        <div className="bg-black text-white min-h-screen flex flex-col items-center justify-center p-4">
-          <p className="text-red-500 text-lg mb-4">Error: {error}</p>
-          <button onClick={() => navigate('/content')} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
-            Back to Content
-          </button>
-        </div>
-      );
-    };
-
-    if (!contentItem) return null;
-
-    if (!video) return null;
-
+  if (isLoading) {
     return (
-      <>
-
-        {contentType === 'watch' && video && (
-          <div>
-            <ChannelSubscriptionUI
-              videoUrl={video.url}
-              videoTitle={video.title}
-              views={video.views}
-              creatorId={creatorData ? creatorData._id : ""}
-              creatorUsername={creatorData ? creatorData.username : ""}
-              followerCount={followerCount}
-              isFollowing={isFollowing}
-              onToogleFollow={HandleToogleFollow}
-            />
-          </div>
-        )}
-
-        {contentType === 'image' && contentItem && (
-          <img src={contentItem.url} alt={contentItem.title} className="max-w-4xl w-full h-auto rounded-lg shadow-lg" />
-        )}
-
-        {contentType === 'file' && contentItem && (
-          <div className="w-full max-w-md bg-gray-800 p-6 rounded-lg text-center">
-            <p className="text-gray-400 text-sm mb-4">📄 File: {contentItem.title}</p>
-            <a
-              href={contentItem.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg inline-flex items-center"
-            >
-              Download File
-            </a>
-          </div>
-        )}
-
-      </>
+      <div className='bg-black text-white min-h-screen flex items-center justify-center'>
+        <p>Loading video.....</p>
+      </div>
     )
-  }
+  };
+
+  if (error) {
+    return (
+      <div className="bg-black text-white min-h-screen flex flex-col items-center justify-center p-4">
+        <p className="text-red-500 text-lg mb-4">Error: {error}</p>
+        <button onClick={() => navigate('/content')} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
+          Back to Content
+        </button>
+      </div>
+    );
+  };
+
+  if (!contentItem) return null;
+
+  if (!video) return null;
+
+  return (
+    <>
+
+      {contentType === 'watch' && video && (
+        <div>
+          <ChannelSubscriptionUI
+            videoUrl={video.url}
+            videoTitle={video.title}
+            views={video.views}
+            creatorId={creatorData ? creatorData._id : ""}
+            creatorUsername={creatorData ? creatorData.username : ""}
+            followerCount={followerCount}
+            isFollowing={isFollowing}
+            onToogleFollow={HandleToogleFollow}
+          />
+        </div>
+      )}
+
+      {contentType === 'image' && contentItem && (
+        <img src={contentItem.url} alt={contentItem.title} className="max-w-4xl w-full h-auto rounded-lg shadow-lg" />
+      )}
+
+      {contentType === 'file' && contentItem && (
+        <div className="w-full max-w-md bg-gray-800 p-6 rounded-lg text-center">
+          <p className="text-gray-400 text-sm mb-4">📄 File: {contentItem.title}</p>
+          <a
+            href={contentItem.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg inline-flex items-center"
+          >
+            Download File
+          </a>
+        </div>
+      )}
+
+    </>
+  )
+}

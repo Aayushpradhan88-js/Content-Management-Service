@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 
 import Chat from "../components/chat/Chat";
+import Account from "../components/account/Account";
 
 export const Content = () => {
     const [contentItems, setContentItems] = useState([]);
@@ -15,7 +16,7 @@ export const Content = () => {
 
             try {
                 //--------------------FETCHING DATA FROM BACKEND--------------------//
-                const response = await fetch(`http://localhost:4000/upload/all-uploads`, {
+                const response = await fetch(`http://localhost:4000/api/upload/all-uploads`, {
                     method: 'GET',
                     headers: {
                         "Content-Type": "application/json"
@@ -90,7 +91,7 @@ export const Content = () => {
                             </button>
                         </div>
 
-                        {/* IMAGE SECTION */}
+                        {/* UPLOAD SECTION */}
                         <div className="flex gap-2">
                             <button
                                 onClick={() => navigate('/upload')}
@@ -99,6 +100,11 @@ export const Content = () => {
                                 + Upload
                             </button>
                         </div>
+                        {/* UPLOAD SECTION */}
+
+                        {/* ACCOUNT SECTION */}
+                        <Account />
+                  
                     </div>
 
                     {/* Content gallery */}
@@ -118,7 +124,7 @@ export const Content = () => {
                                             className="bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 cursor-pointer block"
                                         >
 
-                                            {/* Image */}
+                                            {/*--- Image ---*/}
                                             {item.contentType === 'image' && (
                                                 <img src={item.thumbnail || item.url}
                                                     alt={item.title || 'uploaded image'}
@@ -126,7 +132,7 @@ export const Content = () => {
                                                 />
                                             )}
 
-                                            {/* Video */}
+                                            {/*--- Video ---*/}
                                             {item.contentType === 'video' && (
                                                 <video
                                                     controls
@@ -138,7 +144,7 @@ export const Content = () => {
 
                                             )}
 
-                                            {/* File */}
+                                            {/*--- File ---*/}
                                             {item.contentType === 'file' && (
                                                 <div
                                                     className="w-full h-48 flex items-center justify-center bg-gray-700 p-3">

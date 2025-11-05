@@ -8,7 +8,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-//Registering User
+//---------- Registering User ----------//
 export const registerUser = async (req, res) => {
   const { username, firstname, lastname, email, password } = req.body;
 
@@ -57,7 +57,7 @@ export const registerUser = async (req, res) => {
     .status(201)
     .cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production'
+      secure: false // Set to true when using HTTPS in production
     })
     .json(
       new ApiResponse(
@@ -70,7 +70,7 @@ export const registerUser = async (req, res) => {
 
 };
 
-//login user
+//---------- login user ----------//
 export const loginUser = async (req, res) => {
   const { email, password } = req.body;
   console.log(email)
@@ -102,7 +102,7 @@ export const loginUser = async (req, res) => {
     .status(200)
     .cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production'
+      secure: false // Set to true when using HTTPS in production
     })
     .json(
       new ApiResponse(
@@ -117,57 +117,60 @@ export const loginUser = async (req, res) => {
 
 }
 
-//logout user
+//----------logout user ----------//
 export const logoutUser = async (req, res) => {
-  User.findByIdAndUpdate(req.user._id, 
-    { 
-      $unset: { token: 1 }
-    }
-  );
-
-  const options = {
-   httpOnly: true,
-    secure: false,
-    sameSite: true,
-  };
-  return res.status(200).clearCookie("token", options).json({
-    message: "Successfully logout",
-  });
+  try {
+    // Clear the HTTP-only cookie
+    const options = {
+      httpOnly: true,
+      secure: false, // Set to true when using HTTPS in production
+      sameSite: 'strict',
+    };
+    
+    return res
+      .status(200)
+      .clearCookie("token", options)
+      .json(
+        new ApiResponse(
+          200,
+          options,
+          "Successfully logged out"
+        )
+      );
+  } catch (error) {
+    throw new ApiError(500, "Error during logout");
+  }
 };
 
-/*
 
-//update user
+
+// update user
 export const updateUser = async (req, res) => {
-// try {
-//   const updateUser = await User.findByIdAndUpdate(
-//     req.params.id, // The ID of the user you're updating (from the URL)
-//     req.body, // the data like email, username, fullname, password is the actual thing we need to update
-//     { new: true }
-//   )
-//   if (!updateUser) {
-//     return res.status(403).json("Id doesn't match")
-//   }
+  try {
+    const updateUser = await User.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    )
+    if (!updateUser) {
+      return res.status(403).json("Id doesn't match")
+    }
 
-//   //TODO: Max Time user can update user details [online Research]
-
-//   return res.status(201).json({
-//     message: `You're details are updated ${updateUser.username}`,
-//     user: updateUser,
-//   })
-// } catch (error) {
-//   return res.status(400).json({ message: "cannot update user" })
-// }
-
-console.log("files", req.files);
-req.json({});
+    return res
+      .status(205)
+      .json(
+        new ApiResponse(
+          205,
+          `You're details are updated ${updateUser.username}`,
+          updateUser,
+        )
+      )
+  } catch (error) {
+    return res.status(400).json({ message: "cannot update user" })
+  }
 };
 
-};
-*/
-
-//Folow Status
-
+//Follow Status
 export const toogleFollow = async (req, res) => {
   const { channelId } = req.params;
 
@@ -250,6 +253,6 @@ export const toogleFollow = async (req, res) => {
 }
 
 //USER PROFILE API
-export const getUserProfile = async(req, res)=> {
-  
+export const getUserProfile = async (req, res) => {
+
 }
